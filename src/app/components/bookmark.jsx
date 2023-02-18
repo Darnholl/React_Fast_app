@@ -6,7 +6,7 @@ const Bookmark = (props) => {
   return (
     <button
       className={
-        props.forBookmarks === true
+        props.forBookmarks === false
           ? "bi bi-bookmark"
           : "bi bi-bookmark-heart-fill"
       }
