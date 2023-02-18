@@ -2,10 +2,7 @@ import React from "react";
 
 const Bookmark = (props) => {
   // console.log(props.testToggle());
-  // console.log(props);
-  // const bookmark1 = " bi bi-bookmark";
-  // const bookmarkHeart = "bi bi-bookmark-heart-fill";
-  // return <button className=" bi bi-bookmark"></button>;
+  // console.log(props.forBookmarks);
   return (
     <button
       className={
@@ -13,8 +10,16 @@ const Bookmark = (props) => {
           ? "bi bi-bookmark"
           : "bi bi-bookmark-heart-fill"
       }
-      onClick={() => props.testToggle(props.forBookmarks)}></button>
+      // onClick={() => props.testToggle(props.forBookmarks)}></button>
+      onClick={() => props.testToggle()}></button>
   );
+  //   return (
+  //     <>
+  //       <button className="btn btn-light" onClick={props.testToggle}>
+  //         <i className={`bi bi-bookmark${props.forBookmarks ? "-fill" : ""}`}></i>
+  //       </button>
+  //     </>
+  //   );
 };
 
 export default Bookmark;

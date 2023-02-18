@@ -1,12 +1,14 @@
 import React from "react";
 import User from "./user";
 
-const Users = (props) => {
+const Users = ({ users, onDelete, onToogle }) => {
   // console.log(props.onToogle);
   return (
-    <>
-      <User state={props.users} del={props.onDelete} tog={props.onToogle} />
-    </>
+    <tbody>
+      {users.map((user) => (
+        <User key={user._id} user={user} del={onDelete} tog={onToogle} />
+      ))}
+    </tbody>
   );
 };
 

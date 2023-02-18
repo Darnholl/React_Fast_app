@@ -51,11 +51,22 @@ function App() {
   //   setUsers(newCount);
   // };
 
+  // const handleToogleBookMark = (id) => {
+  //   const newCount = users.map((item) => ({
+  //     ...item,
+  //     bookmark: (item.bookmark = !id),
+  //   }));
+  //   // console.log(id);
+  //   setUsers(newCount);
+  // };
   const handleToogleBookMark = (id) => {
-    const newCount = users.map((item) => ({
-      ...item,
-      bookmark: (item.bookmark = !id),
-    }));
+    // console.log(id);
+    const newCount = users.map((user) => {
+      if (user._id === id) {
+        return { ...user, bookmark: !user.bookmark };
+      }
+      return user;
+    });
     // console.log(id);
     setUsers(newCount);
   };
