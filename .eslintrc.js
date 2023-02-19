@@ -14,7 +14,6 @@ module.exports = {
         indent: ["error", 4], //Отступ количество пробелов
         semi: [2, "always"], //Точка с запятой в конце строки
         "space-before-function-paren": ["error", "never"], // Ошибка при наличии пробела при обозночении функции, уберём её
-        quotes: ["error", "double", { allowTemplateLiterals: true }], // Использование двойных кавычек
-        code: [120]
+        quotes: ["error", "double", { allowTemplateLiterals: true }] // Использование двойных кавычек
     }
 };
