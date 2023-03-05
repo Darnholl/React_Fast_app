@@ -1,32 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
-
-const Bookmark = (props) => {
-    // console.log(props.testToggle());
-    // console.log(props.forBookmarks);
+const BookMark = ({ status, ...rest }) => {
     return (
-        <button
-            className={
-                props.forBookmarks === false
-                    ? "bi bi-bookmark"
-                    : "bi bi-bookmark-heart-fill"
-            }
-            // onClick={() => props.testToggle(props.forBookmarks)}></button>
-            onClick={() => props.testToggle()}
-        ></button>
+        <button {...rest}>
+            <i className={"bi bi-bookmark" + (status ? "-heart-fill" : "")}></i>
+        </button>
     );
-    //   return (
-    //     <>
-    //       <button className="btn btn-light" onClick={props.testToggle}>
-    //         <i className={`bi bi-bookmark${props.forBookmarks ? "-fill" : ""}`}></i>
-    //       </button>
-    //     </>
-    //   );
+};
+BookMark.propTypes = {
+    status: PropTypes.bool
 };
 
-Bookmark.propTypes = {
-    forBookmarks: PropTypes.bool.isRequired,
-    testToggle: PropTypes.func.isRequired
-};
-
-export default Bookmark;
+export default BookMark;
