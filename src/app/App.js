@@ -8,7 +8,10 @@ function App() {
     useEffect(() => {
         api.users.fetchAll().then((data) => setUsers(data));
     }, []);
-    console.log("test", api);
+
+    // useEffect(() => {
+    //     console.log(users);
+    // }, [users]);
 
     const handleDelete = (userId) => {
         setUsers(users.filter((user) => user._id !== userId));
@@ -27,11 +30,13 @@ function App() {
 
     return (
         <div>
-            <Users
-                onDelete={handleDelete}
-                onToggleBookMark={handleToggleBookMark}
-                users={users}
-            />
+            {users && (
+                <Users
+                    onDelete={handleDelete}
+                    onToggleBookMark={handleToggleBookMark}
+                    users={users}
+                />
+            )}
         </div>
     );
 }

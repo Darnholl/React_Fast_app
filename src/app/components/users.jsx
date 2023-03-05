@@ -22,15 +22,21 @@ const Users = ({ users: allUsers, ...rest }) => {
 
     const handleProfessionSelect = (item) => {
         setSelectedProf(item);
+        // console.log(item);
     };
 
     const handlePageChange = (pageIndex) => {
         setCurrentPage(pageIndex);
     };
 
+    // console.log("wtf?", allUsers);
+
     const filteredUsers = selectedProf
-        ? allUsers.filter((user) => user.profession === selectedProf)
+        ? allUsers.filter((user) => user.profession._id === selectedProf._id)
         : allUsers;
+    // const filteredUsers = selectedProf
+    //     ? allUsers.filter((user) => user.profession === selectedProf)
+    //     : allUsers;
 
     const count = filteredUsers.length;
 

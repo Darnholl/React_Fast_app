@@ -5,5 +5,4 @@ const API = {
     professions
 };
 
-console.log(users);
 export default API;
