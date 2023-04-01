@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import Bookmark from "./bookmark";
 import QualitiesList from "./qualitiesList";
 import Table from "./table";
+import NameLink from "./nameLink";
 
 const UserTable = ({
     users,
@@ -13,7 +14,11 @@ const UserTable = ({
     ...rest
 }) => {
     const columns = {
-        name: { path: "name", name: "Имя" },
+        name: {
+            path: "name",
+            component: (user) => <NameLink id={user._id} name={user.name} />,
+            name: "Имя"
+        },
         qualities: {
             name: "Качества",
             component: (user) => <QualitiesList qualities={user.qualities} />
