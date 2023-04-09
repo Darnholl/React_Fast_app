@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { paginate } from "../utils/paginate";
-import Pagination from "./pagination";
+import Pagination from "../components/pagination";
 import api from "../api";
-import GroupList from "./groupList";
-import SearchStatus from "./searchStatus";
-import UserTable from "./usersTable";
+import GroupList from "../components/groupList";
+import SearchStatus from "../components/searchStatus";
+import UserTable from "../components/usersTable";
 import _ from "lodash";
+import SearchPanel from "../components/searchPanel";
 
 const Users = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfessions] = useState();
     const [selectedProf, setSelectedProf] = useState();
     const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
+    const [inputSearch, setInputSearch] = useState("");
     const pageSize = 8;
 
     const [users, setUsers] = useState();
@@ -20,10 +22,6 @@ const Users = () => {
     useEffect(() => {
         api.users.fetchAll().then((data) => setUsers(data));
     }, []);
-
-    // useEffect(() => {
-    //     console.log(users);
-    // }, [users]);
 
     const handleDelete = (userId) => {
         setUsers(users.filter((user) => user._id !== userId));
@@ -48,7 +46,6 @@ const Users = () => {
 
     const handleProfessionSelect = (item) => {
         setSelectedProf(item);
-        // console.log(item);
     };
 
     const handlePageChange = (pageIndex) => {
@@ -62,6 +59,10 @@ const Users = () => {
     if (users) {
         const filteredUsers = selectedProf
             ? users.filter((user) => user.profession._id === selectedProf._id)
+            : inputSearch
+            ? users.filter((u) =>
+                  u.name.toLowerCase().includes(inputSearch.toLowerCase())
+              )
             : users;
 
         const count = filteredUsers.length;
@@ -98,6 +99,10 @@ const Users = () => {
 
                     <div className="d-flex flex-column">
                         <SearchStatus length={count} />
+                        <SearchPanel
+                            value={inputSearch}
+                            onChange={(e) => setInputSearch(e.target.value)}
+                        />
                         {count > 0 && (
                             <UserTable
                                 users={usersCrop}
