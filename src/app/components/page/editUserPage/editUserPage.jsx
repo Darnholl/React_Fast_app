@@ -1,19 +1,27 @@
 import React, { useEffect, useState } from "react";
 import api from "../../../api";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import TextField from "../../common/form/textField";
 import SelectField from "../../common/form/selectField";
 import RadioField from "../../common/form/radioField";
 import MultiSelectField from "../../common/form/multiSelectField";
 
 const EditUserPage = () => {
+    const history = useHistory();
     const params = useParams();
     const [user, setUser] = useState();
     const [qualities, setQualities] = useState([]);
     const [professions, setProfession] = useState([]);
 
     useEffect(() => {
-        api.users.getById(params.userId).then((data) => setUser(data));
+        api.users.getById(params.userId).then((data) => setUser((prev) => ({
+            ...data,
+            ...prev,
+            profession: data.profession._id,
+            qualities: data.qualities.map((qual) => {
+                return { label: qual.name, value: qual._id };
+            })
+        })));
     }, []);
 
     useEffect(() => {
@@ -26,9 +34,7 @@ const EditUserPage = () => {
         });
         api.qualities.fetchAll().then((data) => {
             const qualitiesList = Object.keys(data).map((optionName) => ({
-                value: data[optionName]._id,
-                label: data[optionName].name,
-                color: data[optionName].color
+                value: data[optionName]._id, label: data[optionName].name, color: data[optionName].color
             }));
             setQualities(qualitiesList);
         });
@@ -36,24 +42,8 @@ const EditUserPage = () => {
 
     const handleChange = (target) => {
         setUser((prevState) => ({
-            ...prevState,
-            [target.name]: target.value
+            ...prevState, [target.name]: target.value
         }));
-        console.log(target);
-    };
-
-    const handleDefaultQualities = () => {
-        if (user) {
-            const test = [];
-            for (const ar of user.qualities) {
-                test.push({
-                    value: ar._id,
-                    label: ar.name,
-                    color: ar.color
-                });
-            }
-            return test;
-        }
     };
 
     const getProfessionById = (id) => {
@@ -71,9 +61,7 @@ const EditUserPage = () => {
             for (const quality in qualities) {
                 if (elem.value === qualities[quality].value) {
                     qualitiesArray.push({
-                        _id: qualities[quality].value,
-                        name: qualities[quality].label,
-                        color: qualities[quality].color
+                        _id: qualities[quality].value, name: qualities[quality].label, color: qualities[quality].color
                     });
                 }
             }
@@ -83,21 +71,23 @@ const EditUserPage = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const { profession, qualities } = user;
-        console.log({
+        const { qualities, ...rest } = user;
+        console.log(rest, "rest");
+        api.users.update(params.userId, {
             ...user,
-            profession: getProfessionById(profession),
-            qualities: getQualities(qualities)
+            qualities: getQualities(user.qualities),
+            profession: getProfessionById(user.profession)
         });
+        history.push(`/users/${params.userId}`);
     };
 
-    if (user) {
+    if (user && professions && qualities) {
         return (
             <div className="container mt-5">
                 <div className="row">
                     <div className="col-md-6 offset-md-3 shadow p-4">
                         <form onSubmit={handleSubmit}>
-                            {/* <form onSubmit={handleSubmit}> */}
+
                             <TextField
                                 label="Имя"
                                 name="name"
@@ -119,15 +109,14 @@ const EditUserPage = () => {
                                 options={professions}
                                 name="profession"
                                 onChange={handleChange}
-                                value={user.profession._id}
+                                value={user.profession}
                                 // error={errors.profession}
                             />
                             <RadioField
-                                options={[
-                                    { name: "Male", value: "male" },
-                                    { name: "Female", value: "female" },
-                                    { name: "Other", value: "other" }
-                                ]}
+                                options={[{ name: "Male", value: "male" }, {
+                                    name: "Female",
+                                    value: "female"
+                                }, { name: "Other", value: "other" }]}
                                 value={user.sex}
                                 name="sex"
                                 onChange={handleChange}
@@ -136,7 +125,7 @@ const EditUserPage = () => {
                             <MultiSelectField
                                 options={qualities}
                                 onChange={handleChange}
-                                defaultValue={handleDefaultQualities()}
+                                defaultValue={user.qualities}
                                 name="qualities"
                                 label="Выберите ваши качества"
                             />
@@ -150,8 +139,7 @@ const EditUserPage = () => {
                         </form>
                     </div>
                 </div>
-            </div>
-        );
+            </div>);
     } else {
         return <h1>Loading</h1>;
     }
