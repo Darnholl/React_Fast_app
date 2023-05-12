@@ -66,22 +66,22 @@ const AddCommentForm = ({ onSubmit }) => {
         clearForm();
     };
 
-    const arrayOfUsers =
-        users &&
-        Object.keys(users).map((userId) => ({
-            name: users[userId].name,
-            value: users[userId]._id
-        }));
+    // const arrayOfUsers =
+    //     users &&
+    //     Object.keys(users).map((userId) => ({
+    //         name: users[userId].name,
+    //         value: users[userId]._id
+    //     }));
 
-    useEffect(() => {
-        console.log(users);
-    }, [users]);
+    // useEffect(() => {
+    //     console.log(users);
+    // }, [users]);
     return (
         <div>
             <form onSubmit={handleSubmit}>
                 <SelectField
                     onChange={handleChange}
-                    options={arrayOfUsers}
+                    options={users}
                     name="userId"
                     value={data.userId}
                     defaultOption="Выберите пользователя"
