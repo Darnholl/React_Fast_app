@@ -42,6 +42,7 @@ const AddCommentForm = ({ onSubmit }) => {
     //     API.users.fetchAll().then(setUsers);
     // }, []);
 
+    // Моя попытка решить
     useEffect(() => {
         API.users.fetchAll().then((data) => {
             const UsersList = Object.keys(data).map((userName) => ({
