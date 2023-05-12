@@ -5,6 +5,7 @@ import TextField from "../../common/form/textField";
 import SelectField from "../../common/form/selectField";
 import RadioField from "../../common/form/radioField";
 import MultiSelectField from "../../common/form/multiSelectField";
+import BackHistoryButton from "../../common/backButton";
 
 const EditUserPage = () => {
     const history = useHistory();
@@ -14,14 +15,16 @@ const EditUserPage = () => {
     const [professions, setProfession] = useState([]);
 
     useEffect(() => {
-        api.users.getById(params.userId).then((data) => setUser((prev) => ({
-            ...data,
-            ...prev,
-            profession: data.profession._id,
-            qualities: data.qualities.map((qual) => {
-                return { label: qual.name, value: qual._id };
-            })
-        })));
+        api.users.getById(params.userId).then((data) =>
+            setUser((prev) => ({
+                ...data,
+                ...prev,
+                profession: data.profession._id,
+                qualities: data.qualities.map((qual) => {
+                    return { label: qual.name, value: qual._id };
+                })
+            }))
+        );
     }, []);
 
     useEffect(() => {
@@ -34,7 +37,9 @@ const EditUserPage = () => {
         });
         api.qualities.fetchAll().then((data) => {
             const qualitiesList = Object.keys(data).map((optionName) => ({
-                value: data[optionName]._id, label: data[optionName].name, color: data[optionName].color
+                value: data[optionName]._id,
+                label: data[optionName].name,
+                color: data[optionName].color
             }));
             setQualities(qualitiesList);
         });
@@ -42,7 +47,8 @@ const EditUserPage = () => {
 
     const handleChange = (target) => {
         setUser((prevState) => ({
-            ...prevState, [target.name]: target.value
+            ...prevState,
+            [target.name]: target.value
         }));
     };
 
@@ -61,7 +67,9 @@ const EditUserPage = () => {
             for (const quality in qualities) {
                 if (elem.value === qualities[quality].value) {
                     qualitiesArray.push({
-                        _id: qualities[quality].value, name: qualities[quality].label, color: qualities[quality].color
+                        _id: qualities[quality].value,
+                        name: qualities[quality].label,
+                        color: qualities[quality].color
                     });
                 }
             }
@@ -84,10 +92,10 @@ const EditUserPage = () => {
     if (user && professions && qualities) {
         return (
             <div className="container mt-5">
+                <BackHistoryButton />
                 <div className="row">
                     <div className="col-md-6 offset-md-3 shadow p-4">
                         <form onSubmit={handleSubmit}>
-
                             <TextField
                                 label="Имя"
                                 name="name"
@@ -113,10 +121,14 @@ const EditUserPage = () => {
                                 // error={errors.profession}
                             />
                             <RadioField
-                                options={[{ name: "Male", value: "male" }, {
-                                    name: "Female",
-                                    value: "female"
-                                }, { name: "Other", value: "other" }]}
+                                options={[
+                                    { name: "Male", value: "male" },
+                                    {
+                                        name: "Female",
+                                        value: "female"
+                                    },
+                                    { name: "Other", value: "other" }
+                                ]}
                                 value={user.sex}
                                 name="sex"
                                 onChange={handleChange}
@@ -139,7 +151,8 @@ const EditUserPage = () => {
                         </form>
                     </div>
                 </div>
-            </div>);
+            </div>
+        );
     } else {
         return <h1>Loading</h1>;
     }
