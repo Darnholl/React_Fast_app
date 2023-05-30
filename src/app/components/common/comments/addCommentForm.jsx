@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import API from "../../../api";
 import SelectField from "../form/selectField";
-import { validator } from "../../../utils/validator";
 import TextAreaField from "../form/textAreaField";
+import { validator } from "../../../utils/validator";
 import PropTypes from "prop-types";
-
 const initialData = { userId: "", content: "" };
 
 const AddCommentForm = ({ onSubmit }) => {
@@ -20,7 +19,7 @@ const AddCommentForm = ({ onSubmit }) => {
     const validatorConfig = {
         userId: {
             isRequired: {
-                message: "Выберите от чего имени хотите отправить сообщение"
+                message: "Выберите от чьего имени вы хотите отправить сообщение"
             }
         },
         content: {
@@ -35,29 +34,13 @@ const AddCommentForm = ({ onSubmit }) => {
         setErrors(errors);
         return Object.keys(errors).length === 0;
     };
-
-    // Пример из решения автора!!!!!!!!!!!!!! тоже не работает
-
-    // useEffect(() => {
-    //     API.users.fetchAll().then(setUsers);
-    // }, []);
-
-    // Моя попытка решить
     useEffect(() => {
-        API.users.fetchAll().then((data) => {
-            const UsersList = Object.keys(data).map((userName) => ({
-                label: data[userName].name,
-                value: data[userName]._id
-            }));
-            setUsers(UsersList);
-        });
+        API.users.fetchAll().then(setUsers);
     }, []);
-
     const clearForm = () => {
         setData(initialData);
         setErrors({});
     };
-
     const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = validate();
@@ -65,23 +48,19 @@ const AddCommentForm = ({ onSubmit }) => {
         onSubmit(data);
         clearForm();
     };
-
-    // const arrayOfUsers =
-    //     users &&
-    //     Object.keys(users).map((userId) => ({
-    //         name: users[userId].name,
-    //         value: users[userId]._id
-    //     }));
-
-    // useEffect(() => {
-    //     console.log(users);
-    // }, [users]);
+    const arrayOfUsers =
+        users &&
+        Object.keys(users).map((userId) => ({
+            label: users[userId].name,
+            value: users[userId]._id
+        }));
     return (
         <div>
+            <h2>New comment</h2>
             <form onSubmit={handleSubmit}>
                 <SelectField
                     onChange={handleChange}
-                    options={users}
+                    options={arrayOfUsers}
                     name="userId"
                     value={data.userId}
                     defaultOption="Выберите пользователя"
@@ -101,7 +80,6 @@ const AddCommentForm = ({ onSubmit }) => {
         </div>
     );
 };
-
 AddCommentForm.propTypes = {
     onSubmit: PropTypes.func
 };

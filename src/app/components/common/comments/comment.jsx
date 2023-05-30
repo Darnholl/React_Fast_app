@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import API from "../../../api";
 import { displayDate } from "../../../utils/displayDate";
-
+import API from "../../../api";
 const Comment = ({
     content,
     created_at: created,
@@ -19,11 +18,12 @@ const Comment = ({
             setIsLoading(false);
         });
     }, []);
+
     return (
         <div className="bg-light card-body  mb-3">
             <div className="row">
                 {isLoading ? (
-                    "Loading"
+                    "Loading ..."
                 ) : (
                     <div className="col">
                         <div className="d-flex flex-start ">
@@ -44,7 +44,7 @@ const Comment = ({
                                         <p className="mb-1 ">
                                             {user && user.name}{" "}
                                             <span className="small">
-                                                {displayDate(created)}
+                                                - {displayDate(created)}
                                             </span>
                                         </p>
                                         <button
@@ -64,13 +64,13 @@ const Comment = ({
         </div>
     );
 };
-
 Comment.propTypes = {
     content: PropTypes.string,
+    edited_at: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     created_at: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    _id: PropTypes.string,
     userId: PropTypes.string,
-    onRemove: PropTypes.func
+    onRemove: PropTypes.func,
+    _id: PropTypes.string
 };
 
 export default Comment;

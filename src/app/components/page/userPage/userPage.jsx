@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
-
 import PropTypes from "prop-types";
 import api from "../../../api";
 import UserCard from "../../ui/userCard";
@@ -13,13 +11,6 @@ const UserPage = ({ userId }) => {
     useEffect(() => {
         api.users.getById(userId).then((data) => setUser(data));
     }, []);
-
-    const history = useHistory();
-
-    const handleClick = () => {
-        history.push("/users");
-    };
-
     if (user) {
         return (
             <div className="container">
@@ -28,7 +19,6 @@ const UserPage = ({ userId }) => {
                         <UserCard user={user} />
                         <QualitiesCard data={user.qualities} />
                         <MeetingsCard value={user.completedMeetings} />
-                        <button onClick={handleClick}> Все Пользователи</button>
                     </div>
                     <div className="col-md-8">
                         <Comments />
