@@ -4,6 +4,7 @@ import TextField from "../common/form/textField";
 import CheckBoxField from "../common/form/checkBoxField";
 import { useAuth } from "../../hooks/useAuth";
 import { useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const LoginForm = () => {
     const [data, setData] = useState({
@@ -63,7 +64,16 @@ const LoginForm = () => {
         try {
             await signIn(data);
             history.push("/");
-            alert("Вы вошли в систему.");
+            toast("Вы вошли в систему.", {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark"
+            });
         } catch (error) {
             setErrors(error);
         }
