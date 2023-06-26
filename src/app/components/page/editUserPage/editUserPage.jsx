@@ -6,19 +6,25 @@ import SelectField from "../../common/form/selectField";
 import RadioField from "../../common/form/radioField";
 import MultiSelectField from "../../common/form/multiSelectField";
 import BackHistoryButton from "../../common/backButton";
-import { useProfessions } from "../../../hooks/useProfession";
-import { useQualities } from "../../../hooks/useQualities";
 import { useAuth } from "../../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import {
+    getQualities
+    // getQualitiesLoadingStatus
+} from "../../../store/qualities";
+import { getProfessions } from "../../../store/professions";
 
 const EditUserPage = () => {
     // const { userId } = useParams();
     const history = useHistory();
-    const [isLoading, setIsLoading] = useState(false);
+    // const [isLoading, setIsLoading] = useState(false);
     const { currentUser, edit } = useAuth();
-    const { professions } = useProfessions();
-    const { qualities } = useQualities();
+    const professions = useSelector(getProfessions());
+    const qualities = useSelector(getQualities());
+    // const qualitiesLoading = useSelector(getQualitiesLoadingStatus());
 
     const qualForForm = transformCurrUserQual();
+    // console.log(professions);
 
     const [data, setData] = useState({
         name: currentUser.name,
@@ -69,7 +75,7 @@ const EditUserPage = () => {
             }
         }
     };
-    const getQualities = (elements) => {
+    const getQualitiesPrev = (elements) => {
         const qualitiesArray = [];
         for (const elem of elements) {
             for (const quality in qualArray) {
@@ -89,13 +95,13 @@ const EditUserPage = () => {
         //     .update(userId, {
         //         ...data,
         //         profession: getProfessionById(profession),
-        //         qualities: getQualities(qualities)
+        //         qualities: getQualitiesPrev(qualities)
         //     })
         //     .then((data) => history.push(`/users/${data._id}`));
         edit({
             ...data,
             profession: getProfessionById(profession),
-            qualities: getQualities(qualities)
+            qualities: getQualitiesPrev(qualities)
         });
         history.push(`/users/${currentUser._id}`);
         // console.log({
@@ -133,9 +139,9 @@ const EditUserPage = () => {
     //         setQualities(qualitiesList);
     //     });
     // }, []);
-    useEffect(() => {
-        if (data._id) setIsLoading(false);
-    }, [data]);
+    // useEffect(() => {
+    //     if (data._id) setIsLoading(false);
+    // }, [data]);
 
     const validatorConfig = {
         email: {
@@ -173,60 +179,56 @@ const EditUserPage = () => {
             <BackHistoryButton />
             <div className="row">
                 <div className="col-md-6 offset-md-3 shadow p-4">
-                    {!isLoading && Object.keys(professions).length > 0 ? (
-                        <form onSubmit={handleSubmit}>
-                            <TextField
-                                label="Имя"
-                                name="name"
-                                value={data.name}
-                                onChange={handleChange}
-                                error={errors.name}
-                            />
-                            <TextField
-                                label="Электронная почта"
-                                name="email"
-                                value={data.email}
-                                onChange={handleChange}
-                                error={errors.email}
-                            />
-                            <SelectField
-                                label="Выбери свою профессию"
-                                defaultOption="Choose..."
-                                options={testProfChange()}
-                                name="profession"
-                                onChange={handleChange}
-                                value={data.profession}
-                                error={errors.profession}
-                            />
-                            <RadioField
-                                options={[
-                                    { name: "Male", value: "male" },
-                                    { name: "Female", value: "female" },
-                                    { name: "Other", value: "other" }
-                                ]}
-                                value={currentUser.sex}
-                                name="sex"
-                                onChange={handleChange}
-                                label="Выберите ваш пол"
-                            />
-                            <MultiSelectField
-                                defaultValue={data.qualities}
-                                options={testQualChange()}
-                                onChange={handleChange}
-                                name="qualities"
-                                label="Выберите ваши качества"
-                            />
-                            <button
-                                type="submit"
-                                disabled={!isValid}
-                                className="btn btn-primary w-100 mx-auto"
-                            >
-                                Обновить
-                            </button>
-                        </form>
-                    ) : (
-                        "Loading..."
-                    )}
+                    <form onSubmit={handleSubmit}>
+                        <TextField
+                            label="Имя"
+                            name="name"
+                            value={data.name}
+                            onChange={handleChange}
+                            error={errors.name}
+                        />
+                        <TextField
+                            label="Электронная почта"
+                            name="email"
+                            value={data.email}
+                            onChange={handleChange}
+                            error={errors.email}
+                        />
+                        <SelectField
+                            label="Выбери свою профессию"
+                            defaultOption="Choose..."
+                            options={testProfChange()}
+                            name="profession"
+                            onChange={handleChange}
+                            value={data.profession}
+                            error={errors.profession}
+                        />
+                        <RadioField
+                            options={[
+                                { name: "Male", value: "male" },
+                                { name: "Female", value: "female" },
+                                { name: "Other", value: "other" }
+                            ]}
+                            value={currentUser.sex}
+                            name="sex"
+                            onChange={handleChange}
+                            label="Выберите ваш пол"
+                        />
+                        <MultiSelectField
+                            defaultValue={data.qualities}
+                            options={testQualChange()}
+                            onChange={handleChange}
+                            name="qualities"
+                            label="Выберите ваши качества"
+                        />
+                        <button
+                            type="submit"
+                            disabled={!isValid}
+                            className="btn btn-primary w-100 mx-auto"
+                        >
+                            Обновить
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
