@@ -9,8 +9,8 @@ const Comments = () => {
     const handleSubmit = (data) => {
         createComment(data);
         // api.comments
-        // .add({ ...data, pageId: userId })
-        // .then((data) => setComments([...comments, data]));
+        //     .add({ ...data, pageId: userId })
+        //     .then((data) => setComments([...comments, data]));
     };
     const handleRemoveComment = (id) => {
         removeComment(id);

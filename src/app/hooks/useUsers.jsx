@@ -33,7 +33,6 @@ const UserProvider = ({ children }) => {
             errorCatcher(error);
         }
     }
-
     useEffect(() => {
         if (!isLoading) {
             const newUsers = [...users];
@@ -44,7 +43,6 @@ const UserProvider = ({ children }) => {
             setUsers(newUsers);
         }
     }, [currentUser]);
-
     function errorCatcher(error) {
         const { message } = error.response.data;
         setError(message);
